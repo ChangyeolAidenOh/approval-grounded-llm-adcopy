@@ -1,7 +1,7 @@
-"""{BRAND} 카피 카탈로그 v1 빌더 — 정적 단일 HTML.
+"""__BRAND__ 카피 카탈로그 v1 빌더 — 정적 단일 HTML.
 
 입력: data/copy/catalog/judgments_v1_1.parquet (v1 1,348 + v1.1 보충 판정)
-출력: data/copy/catalog/{brand}_copy_catalog_v1.html (사내 정본)
+출력: data/copy/catalog/__BRAND___copy_catalog_v1.html (사내 정본)
       data/copy/catalog/copy_catalog_public.html (--public, 마스킹 공개판)
 
 인자 없이: 통계·빌드 계획만 출력 (dry-run).
@@ -17,7 +17,7 @@ from pathlib import Path
 import pandas as pd
 
 JUDGE = Path("data/copy/catalog/judgments_v1_1.parquet")
-OUT = Path("data/copy/catalog/{brand}_copy_catalog_v1_1.html")
+OUT = Path("data/copy/catalog/__BRAND___copy_catalog_v1_1.html")
 OUT_DEMO = Path("data/copy/catalog/copy_catalog_public.html")
 
 FMT_LABEL = {
@@ -34,12 +34,12 @@ FIELD_LABEL = {
     "sub": "서브타이틀", "main": "메인타이틀",
 }
 DEMO_MAP = {
-    "{BRAND}": "브랜디아", "{BRAND}": "Brandia", "{BRAND}": "BRANDIA", "{brand}": "brandia",
-    "{PRODUCT_PROBIOTIC}": "프로바이오 스토리", "{PRODUCT_PROBIOTIC}": "프로바이오 스토리",
-    "{PRODUCT_PROBIOTIC}": "프로바이오 스토리", "{PRODUCT_PROBIOTIC}": "프로바이오 스토리",
-    "{PRODUCT_VITAMIN}": "트루비타", "{PRODUCT_VITAMIN}": "트루비타",
-    "{PRODUCT_OMEGA} 900": "오메가트루 900", "{PRODUCT_OMEGA}": "오메가트루", "{PRODUCT_OMEGA}": "오메가트루",
-    "{ORIGIN}": "북유럽",
+    "__BRAND__": "브랜디아", "__BRAND__": "Brandia", "__BRAND__": "BRANDIA", "__BRAND__": "brandia",
+    "__PRODUCT_PROBIOTIC__": "프로바이오 스토리", "__PRODUCT_PROBIOTIC__": "프로바이오 스토리",
+    "__PRODUCT_PROBIOTIC__": "프로바이오 스토리", "__PRODUCT_PROBIOTIC__": "프로바이오 스토리",
+    "__PRODUCT_VITAMIN__": "트루비타", "__PRODUCT_VITAMIN__": "트루비타",
+    "__PRODUCT_OMEGA__ 900": "오메가트루 900", "__PRODUCT_OMEGA__": "오메가트루", "__PRODUCT_OMEGA__": "오메가트루",
+    "__ORIGIN__": "북유럽",
 }
 LINE_MAP = {
     "line_base": "베이직", "line_i": "눈건강", "line_woman": "여성", "line_pro": "line_pro", "line_active": "line_active",
@@ -221,7 +221,7 @@ def main():
     recs = to_records(df, demo=args.demo)
     data = json.dumps(recs, ensure_ascii=False, separators=(",", ":"))
     title = ("Copy Catalog v1 — public build (client copy text withheld)" if args.demo
-             else f"{BRAND} 카피 카탈로그 v1.1 — {len(df):,} 사전 판정")
+             else f"__BRAND__ 카피 카탈로그 v1.1 — {len(df):,} 사전 판정")
     html = (HTML.replace("__TITLE__", title)
                 .replace("__FMTLABEL__", json.dumps(FMT_LABEL, ensure_ascii=False))
                 .replace("__FLDLABEL__", json.dumps(FIELD_LABEL, ensure_ascii=False))

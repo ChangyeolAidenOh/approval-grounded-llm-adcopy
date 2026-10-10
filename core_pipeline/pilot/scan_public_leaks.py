@@ -11,18 +11,18 @@ from pathlib import Path
 
 import pandas as pd
 
-V1 = Path("data/copy/catalog/{brand}_copy_catalog_v1.html")
+V1 = Path("data/copy/catalog/__BRAND___copy_catalog_v1.html")
 PUB = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("data/copy/catalog/copy_catalog_public.html")
 REG = Path("data/copy/live_assets/copy_registry_live_v1.parquet")
 JUDGE = Path("data/copy/catalog/judgments_v1n.parquet")
 
 BRAND_TOKENS = [
-    "{BRAND}", "{BRAND}", "{BRAND}", "{brand}",
-    "{PRODUCT_PROBIOTIC}", "{PRODUCT_PROBIOTIC}", "{PRODUCT_PROBIOTIC}",
-    "{PRODUCT_VITAMIN}", "{PRODUCT_VITAMIN}", "{PRODUCT_OMEGA}", "{PRODUCT_OMEGA}",
-    "알티지 {PRODUCT_OMEGA}", "line_rtg900", "rtg900",
+    "__BRAND__", "__BRAND__", "__BRAND__", "__BRAND__",
+    "__PRODUCT_PROBIOTIC__", "__PRODUCT_PROBIOTIC__", "__PRODUCT_PROBIOTIC__",
+    "__PRODUCT_VITAMIN__", "__PRODUCT_VITAMIN__", "__PRODUCT_OMEGA__", "__PRODUCT_OMEGA__",
+    "알티지 __PRODUCT_OMEGA__", "line_rtg900", "rtg900",
     "TrueVitamin", "Truevitamin", "TRUE VITAMIN", "TrueOmega", "TRUE OMEGA",
-    "_{APPROVAL_TAG}_", "approved_ref.pdf", "DEMO-", "demo build",
+    "___APPROVAL_TAG___", "approved_ref.pdf", "DEMO-", "demo build",
 ]
 MASK_VALUES = ["브랜디아", "Brandia", "프로바이오 스토리", "트루비타", "오메가트루", "북유럽",
                "베이직", "눈건강", "여성", "고함량", "엑스트라", "집중", "코엔자임"]
@@ -80,7 +80,7 @@ def main():
             for s in snippets(pub_html, t):
                 print(f"     ...{s}...")
     print("  title:", re.search(r"<title>(.*?)</title>", pub_html, re.S).group(1).strip())
-    print("  filename contains brand:", "{brand}" in PUB.name.lower())
+    print("  filename contains brand:", "__BRAND__" in PUB.name.lower())
 
     section("B. real simui / pdf values from v1 present in public html")
     real_simui = {str(t["simui"]) for r in v1 for t in r["top5"]}
@@ -123,7 +123,7 @@ def main():
         print(f"     {i} {k}: {v[:40]!r}")
 
     section("F. masking artefacts")
-    dd = pub_html.count("오메가트루트루") + pub_html.count("{PRODUCT_OMEGA}DD") + pub_html.count("브랜디아브랜디아")
+    dd = pub_html.count("오메가트루트루") + pub_html.count("__PRODUCT_OMEGA__DD") + pub_html.count("브랜디아브랜디아")
     total += dd
     print(f"  double-replace artefacts: {dd}")
     print("  mask value counts:", {v: pub_html.count(v) for v in MASK_VALUES})
